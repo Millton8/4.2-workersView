@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/src/Style/generalReportStyle.css">
+    <link rel="stylesheet" href="/src/Style/mediaTypeStyle.css">
+    <title>Общий отчет</title>
+
+    <script src="src/errorsHandler.js"></script>
+</head>
+<body>
+    <div style="text-align: center;" id="mainDiv">
+        <div style="text-align: left;margin-left: 20px;">
+            <p id="toStatus">👈На главную</p>
+        </div>
+        <div>
+            <input type="text" id="fName" value="по Имени"> </br> <input type="text" id="fProject" value="по Проекту"> </br> <input type="date" id="fTBegin"> </br> <input type="date" id="fTEnd">
+        </div>
+
+        <div>
+            <table style="margin-top: 30px;">
+                <thead><tr><th>Ид</th><th>Имя</th><th>Объект</th><th>Начал</th><th>Закончил</th><th>Время</th><th>ЗП в час</th><th>Заработал</th></tr></thead>
+                <tbody>
+                </tbody>
+            </table>
+            <br>
+            <br>
+            <table style="margin-bottom: 30px;margin-top: 30px;">
+                <thead><tr><th>Отработано часов</th><th>Выплачено денег</th><th>Выполнено проектов</th></tr></thead>
+                <tbody id="lowTable">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="src/toStatus.js"></script>
+    <script src="src/generalReport.js"></script>
+    <script>
+
+
+    </script>
+
+</body>
+</html>

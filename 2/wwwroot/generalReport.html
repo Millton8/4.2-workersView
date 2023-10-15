@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/src/Style/generalReportStyle.css">
+    <link rel="stylesheet" href="/src/Style/mediaTypeStyle.css">
+    <title>Общий отчет</title>
+
+
+</head>
+<body>
+    <div style="text-align: center;" id="mainDiv">
+        <div style="text-align: left;margin-left: 20px;">
+            <p id="toStatus">👈На главную</p>
+        </div>
+        <div>
+            <input type="text" id="fName" value="по Имени">  <input type="text" id="fProject" value="по Проекту">  <input type="date" id="fTBegin">  <input type="date" id="fTEnd">
+        </div>
+
+        <div>
+            <table style="margin-top: 30px;">
+                <thead><tr><th>Ид</th><th>Имя</th><th>Объект</th><th>Начал</th><th>Закончил</th><th>Время</th><th>ЗП в час</th><th>Заработал</th></tr></thead>
+                <tbody>
+                </tbody>
+            </table>
+            <br>
+            <br>
+            <table style="margin-bottom: 30px;margin-top: 30px;">
+                <thead><tr><th>Отработано часов</th><th>Выплачено денег</th><th>Выполнено проектов</th></tr></thead>
+                <tbody id="lowTable">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="src/toStatus.js"></script>
+    <script>
+        const token2 = sessionStorage.getItem("accessToken")
+
+        filters()
+
+        async function filters() {
+
+
+            var report = await getReport()
+            const fName = document.getElementById("fName")
+            const fProject = document.getElementById("fProject")
+            const fTBegin = document.getElementById("fTBegin")
+            const fTEnd = document.getElementById("fTEnd")
+
+            fName.addEventListener("input", event => {
+                var { value } = event.target
+                if (value === "")
+                    render(report)
+                else
+                    render(report.filter((x) => { return x.name === value }))
+                console.log(value, typeof value)
+            })
+
+            fProject.addEventListener("input", event => {
+                var { value } = event.target
+                if (value === "")
+                    render(report)
+                else
+                    render(report.filter((x) => { return x.project === value }))
+                console.log(value, typeof value)
+            })
+
+            fTBegin.addEventListener("input", event => {
+                var { value } = event.target
+                if (value === "")
+                    render(report)
+                else
+                    render(report.filter((x) => {
+                        console.log(typeof x.tBegin)
+                        value = new Date(value)
+                        return x.tBegin >= value
+                    }))
+                console.log(value, typeof value)
+            })
+
+            fTEnd.addEventListener("input", event => {
+                var { value } = event.target
+                if (value === "")
+                    render(report)
+                else
+                    render(report.filter((x) => {
+                        console.log(typeof x.tBegin)
+                        value = new Date(value)
+                        return x.tBegin < value
+                    }))
+                console.log(value, typeof value)
+            })
+            console.log("====")
+            //console.log(filtered)
+        }
+
+
+        async function getReport() {
+            var t = document.getElementById("textfield")
+            // const token2 = sessionStorage.getItem("accessToken")
+
+
+            const response = await fetch(`/list`, {
+                method: "GET",
+                headers: { "custom-header": "application/json", "Authorization": "Bearer " + token2 }
+
+            })
+            if (response.ok === true) {
+
+                const report = await response.json()
+
+                for (const keys of report) {
+                    keys.tBegin = new Date(keys.tBegin)
+                    keys.tEnd = new Date(keys.tEnd)
+                }
+
+                render(report)
+                return report
+            }
+            else if (response.status === 401) {
+                document.getElementById("mainDiv").innerHTML = "Ошибка доступа. Вы не авторизованы"
+                console.log(response.status, response.statusText)
+            }
+            else if (response.status === 404) {
+                document.getElementById("mainDiv").innerHTML = "Ошибка. Клиент не правильно сформировал запрос"
+                console.log(response.status, response.statusText)
+            }
+        }
+
+
+        function render(report) {
+            var sumSalary = 0
+            var sumTime = 0
+            var projectsCount = 0
+            var customObject = new Object()
+
+            const rows = document.querySelector("tbody");
+            rows.innerHTML = ""
+            for (const i in report) {
+
+                const tr = document.createElement("tr");
+                tr.setAttribute("data-rowid", report[i].id);
+
+                const uniqTd = document.createElement("td");
+                uniqTd.append(report[i].uniq);
+                tr.append(uniqTd);
+
+                const nameTd = document.createElement("td");
+                nameTd.append(report[i].name);
+                tr.append(nameTd);
+
+                const projectTd = document.createElement("td");
+                projectTd.append(report[i].project);
+                tr.append(projectTd);
+                customObject[report[i].project] = 1
+
+
+                const tbeginTd = document.createElement("td");
+                tbeginTd.append(report[i].tBegin.toLocaleString("ru-RU", { year: "2-digit" } + { month: "2-digit" }));
+                tr.append(tbeginTd);
+
+                const tendTd = document.createElement("td");
+                tendTd.append(report[i].tEnd.toLocaleString("ru-RU", { year: "2-digit" } + { month: "2-digit" }));
+                tr.append(tendTd);
+
+                const timeOfWorkTd = document.createElement("td");
+                timeOfWorkTd.append(report[i].timeOfWork);
+                tr.append(timeOfWorkTd);
+                sumTime += report[i].timeOfWork
+
+                const priceTd = document.createElement("td");
+                priceTd.append(report[i].price);
+                tr.append(priceTd);
+
+                const salaryTd = document.createElement("td");
+                salaryTd.append(report[i].salary);
+                tr.append(salaryTd);
+                sumSalary += report[i].salary
+
+
+
+
+                rows.append(tr)
+            }
+
+
+
+            //console.log(report[0].id,report[0].uniq)
+
+            for (var key in customObject) {
+                projectsCount++;
+            }
+            const lowTB = document.getElementById("lowTable")
+            lowTB.innerHTML = ""
+            const trCount = document.createElement("tr");
+            trCount.style = "background:#f6f4a6;font-size: large;"
+            const timeSumTd = document.createElement("td");
+
+            timeSumTd.append(sumTime)
+            trCount.append(timeSumTd)
+
+            const salarySumTd = document.createElement("td");
+            salarySumTd.append(sumSalary)
+            trCount.append(salarySumTd)
+
+            const projectsCountTd = document.createElement("td");
+            projectsCountTd.append(projectsCount)
+            trCount.append(projectsCountTd)
+
+
+            lowTB.append(trCount)
+        }
+
+    </script>
+
+</body>
+</html>

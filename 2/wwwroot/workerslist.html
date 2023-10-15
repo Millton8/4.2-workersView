@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/src/Style/workersStyle.css">
+    <link rel="stylesheet" href="/src/Style/mediaTypeStyle.css">
+    <title>Список сотрудников</title>
+
+
+</head>
+<body>
+    <div style="text-align: center;" id="mainDiv">
+        <div style="text-align: left;margin-left: 20px;">
+            <p id="toStatus">👈На главную</p>
+        </div>
+
+        <div>
+            <table>
+                <thead><tr><th>Идентификатор</th><th>Имя</th><th>Зарплата</th><th>Изменить</th></tr></thead>
+                <tbody id="workersTable">
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <p id="information"></p>
+        </div>
+    </div>
+    <script src="src/toStatus.js"></script>
+    <script>
+        getReport()
+        async function getReport() {
+            const token2 = sessionStorage.getItem("accessToken")
+            const information = document.getElementById("information")
+
+
+
+            const response = await fetch(`/listworkers`, {
+                method: "GET",
+                headers: { "custom-header": "application/json", "Authorization": "Bearer " + token2 }
+
+            })
+            if (response.ok === true) {
+
+                const report = await response.json()
+                if (report.length === 0) {
+                    information.innerHTML = "Нет данных за этот период"
+                    return
+                }
+                else
+                    information.innerHTML = ""
+
+
+                console.log(report.length)
+                const workersTable = document.getElementById("workersTable")
+                workersTable.innerHTML = ""
+                const cells = document.querySelectorAll('tr');
+                cells.style = "background:rgb(251, 255, 1);font-size: large;"
+                for (const i in report) {
+                    console.log(report[i])
+
+                    const trCount = document.createElement("tr");
+                    trCount.setAttribute("data-rowid", 0);
+
+                    const uniqTd = document.createElement("td");
+                    uniqTd.append(report[i].uniq)
+                    trCount.append(uniqTd)
+
+                    const nameTd = document.createElement("td");
+                    nameTd.append(report[i].name)
+                    trCount.append(nameTd)
+
+                    const priceTd = document.createElement("td");
+                    priceTd.append(report[i].price)
+                    trCount.append(priceTd)
+                    const editTd = document.createElement("td");
+                    editTd.innerHTML = "✏️"
+                    editTd.addEventListener("click", async e => {
+                        e.preventDefault();
+                        console.log("ddddd", report[i].id)
+                        window.location.replace(`/edit.html?${report[i].id}?${token2}`)
+                    }
+                    )
+
+                    trCount.append(editTd)
+
+
+                    workersTable.append(trCount)
+                }
+
+
+            }
+            else if (response.status === 401) {
+                document.getElementById("mainDiv").innerHTML = "Ошибка доступа. Вы не авторизованы"
+                console.log(response.status, response.statusText)
+            }
+            else if (response.status === 404) {
+                document.getElementById("mainDiv").innerHTML = "Ошибка. Клиент не правильно сформировал запрос"
+                console.log(response.status, response.statusText)
+            }
+            else
+                document.getElementById("mainDiv").innerHTML = "Ошибка. Сервер не отвечает"
+            console.log(response.status, response.statusText)
+        }
+
+    </script>
+
+</body>
+</html>

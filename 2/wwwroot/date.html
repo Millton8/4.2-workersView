@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/src/Style/dateStyle.css">
+    <link rel="stylesheet" href="/src/Style/mediaTypeStyle.css">
+    <title>Зарплата за период</title>
+</head>
+<body>
+
+    <div style="text-align: center;" id="mainDiv">
+        <div style="text-align: left;margin-left: 20px;">
+            <p id="toStatus">👈На главную</p>
+        </div>
+        <div>
+            <table class="zero">
+                <tr>
+                    <td>
+                        <input type="date" id="dateDo">
+                    </td>
+                    <td>
+                        <input type="date" id="datePosle">
+                    </td>
+                    <td>
+                        <button class="btn" onclick="getReport()"><span>Сформировать отчет</span></button>
+                    </td>
+                </tr>
+            </table>
+            
+            
+           
+           
+        </div>
+        <div style="text-align: center;">
+            <table id="salaryTable">
+                <thead><tr><th>Номер</th><th>Имя</th><th>Заработал</th></tr></thead>
+                <tbody id="salaryTableBody">
+                </tbody>
+                </table>
+                
+        </div>
+        <div>
+            <p id="information"></p>
+        </div>
+    </div>
+    <script src="src/toStatus.js"></script>
+    <script>
+        const salaryTable = document.getElementById("salaryTable")
+       
+        if(salaryTable.ariaColCount===null)
+            salaryTable.style.visibility = "hidden"
+        
+        console.log(salaryTable.ariaColCount)
+
+        async function getReport() {
+            const token2 = sessionStorage.getItem("accessToken")
+
+            var dateDo = document.getElementById("dateDo").value
+            var datePosle = document.getElementById("datePosle").value
+            if (dateDo === "")
+                dateDo = "01.01.23"
+            if (datePosle === "")
+                datePosle = "01.01.2300"
+            const information = document.getElementById("information")
+            console.log("Дата", dateDo, typeof dateDo)
+            console.log("Дата", datePosle, typeof datePosle)
+
+            const response = await fetch(`/date/${dateDo}/${datePosle}`, {
+                method: "GET",
+                headers: { "custom-header": "application/json", "Authorization": "Bearer " + token2 }
+
+            })
+            if (response.ok === true) {
+
+                const report = await response.json()
+                if (report.length === 0) {
+                    information.innerHTML = "Нет данных за этот период"
+                    return
+                }
+                else
+                    information.innerHTML = ""
+                salaryTable.style.visibility = "visible"
+                const salaryTableBody = document.getElementById("salaryTableBody")
+                salaryTableBody.innerHTML = ""
+                for (const i in report) {
+                    const trCount = document.createElement("tr");
+                    trCount.setAttribute("data-rowid", 0);
+
+                    const uniqTd = document.createElement("td");
+                    uniqTd.append(report[i].uniq)
+                    trCount.append(uniqTd)
+
+                    const nameTd = document.createElement("td");
+                    nameTd.append(report[i].name)
+                    trCount.append(nameTd)
+
+                    const salaryTd = document.createElement("td");
+                    salaryTd.append(report[i].sum)
+                    trCount.append(salaryTd)
+
+                    salaryTableBody.append(trCount)
+                }
+
+
+            }
+            else if (response.status === 401) {
+                document.getElementById("mainDiv").innerHTML = "Ошибка доступа. Вы не авторизованы"
+                console.log(response.status, response.statusText)
+            }
+            else if (response.status === 404) {
+                document.getElementById("mainDiv").innerHTML = "Ошибка. Клиент не правильно сформировал запрос"
+                console.log(response.status, response.statusText)
+            }
+            else
+                document.getElementById("mainDiv").innerHTML = "Ошибка. Сервер не отвечает"
+            console.log(response.status, response.statusText)
+        }
+
+    </script>
+
+</body>
+</html>

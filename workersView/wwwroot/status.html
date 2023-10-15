@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/src/Style/statusStyle.css">
+    <link rel="stylesheet" href="/src/Style/mediaTypeStyle.css">
+    <link rel="stylesheet" href="/src/Style/btnNavigateStyle.css">
+    <title>Главная</title>
+    
+    <script src="src/errorsHandler.js"></script>
+</head>
+<body onload="getStatus()">
+
+    <div style="text-align: center;" id="mainDiv">
+        <table>
+            <thead><tr><th>Номер</th><th>Идентификатор</th><th>Имя</th><th>Объект</th><th>Статус</th><th></th></tr></thead>
+            <tbody>
+            </tbody>
+        </table>
+        <br>
+        <br>
+        <table id="online">
+            <thead><tr><th>Объект</th><th>Сейчас работают</th></tr></thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div style="margin-top: 30px;">
+            <p id="information"></p>
+            <button class="btn" id="toGeneral">Полная информация</button><br />
+            <button class="btn" id="toDates">Зарплата за период</button><br />
+            <button class="btn" id="toWorkers">Сотрудники</button><br />
+        </div>
+
+    </div>
+    <script src="src/status.js"></script>
+</body>
+</html>

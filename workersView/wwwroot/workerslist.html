@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/src/Style/workersStyle.css">
+    <link rel="stylesheet" href="/src/Style/mediaTypeStyle.css">
+    <title>Список сотрудников</title>
+    
+    <script src="src/workerslist.js"></script>
+    <script src="src/errorsHandler.js"></script>
+</head>
+<body onload="getReport()">
+    <div style="text-align: center;" id="mainDiv">
+        <div style="text-align: left; margin-left: 20px; margin-bottom: 5%;">
+            <p id="toStatus">👈На главную</p>
+        </div>
+
+        <div>
+            <table>
+                <thead><tr><th>Идентификатор</th><th>Имя</th><th>Зарплата</th><th>Изменить</th></tr></thead>
+                <tbody id="workersTable">
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <p id="information"></p>
+        </div>
+    </div>
+    <script src="src/toStatus.js"></script>
+</body>
+</html>

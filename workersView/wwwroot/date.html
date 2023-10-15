@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/src/Style/dateStyle.css">
+    <link rel="stylesheet" href="/src/Style/mediaTypeStyle.css">
+    <title>Зарплата за период</title>
+    <script src="src/errorsHandler.js"></script>
+</head>
+<body>
+
+    <div style="text-align: center;" id="mainDiv">
+        <div style="text-align: left;margin-left: 20px;">
+            <p id="toStatus">👈На главную</p>
+        </div>
+        <div>
+            <table class="zero">
+                <tr>
+                    <td>
+                        <input type="date" id="dateDo">
+                    </td>
+                    <td>
+                        <input type="date" id="datePosle">
+                    </td>
+
+                    <td>
+                        <button class="btn" onclick="getReport()"><span>Сформировать отчет</span></button>
+                    </td>
+                </tr>
+            </table>
+
+
+
+
+        </div>
+        <div style="text-align: center;">
+            <table id="salaryTable">
+                <thead><tr><th>Номер</th><th>Имя</th><th>Заработал</th></tr></thead>
+                <tbody id="salaryTableBody">
+                </tbody>
+            </table>
+
+        </div>
+        <div>
+            <p id="information"></p>
+        </div>
+    </div>
+    <script src="src/toStatus.js"></script>
+    <script src="src/date.js"></script>
+    <script>
+
+
+    </script>
+
+</body>
+</html>
