@@ -5,7 +5,7 @@ ASP.NET CORE
 
 Фронт html + чистый JS
 <div> 
- Данные береи из PostgreSQL<br />
+ Данные берем из PostgreSQL<br />
 В этот раз не на чистом SQL а с Dapper<br />
 <div>
   <br>
