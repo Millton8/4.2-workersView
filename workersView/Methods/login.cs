@@ -9,7 +9,6 @@ namespace workersView
         private async static Task Login(HttpContext context)
         {
             var password = await context.Request.ReadFromJsonAsync<string>();
-            await Console.Out.WriteLineAsync(password);
             if (password != "111")
             {
                 context.Response.StatusCode = 400;

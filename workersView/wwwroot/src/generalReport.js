@@ -17,7 +17,7 @@ async function filters() {
             render(report)
         else
             render(report.filter((x) => { return x.name === value }))
-        console.log(value, typeof value)
+
     })
 
     fProject.addEventListener("input", event => {
@@ -26,7 +26,7 @@ async function filters() {
             render(report)
         else
             render(report.filter((x) => { return x.project === value }))
-        console.log(value, typeof value)
+
     })
 
     fTBegin.addEventListener("input", event => {
@@ -35,11 +35,10 @@ async function filters() {
             render(report)
         else
             render(report.filter((x) => {
-                console.log(typeof x.tBegin)
                 value = new Date(value)
                 return x.tBegin >= value
             }))
-        console.log(value, typeof value)
+
     })
 
     fTEnd.addEventListener("input", event => {
@@ -48,13 +47,12 @@ async function filters() {
             render(report)
         else
             render(report.filter((x) => {
-                console.log(typeof x.tBegin)
                 value = new Date(value)
                 return x.tBegin < value
             }))
-        console.log(value, typeof value)
+
     })
-    console.log("====")
+
 
 }
 

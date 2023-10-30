@@ -25,16 +25,8 @@ namespace workersView
         private async static Task<IResult> Update(HttpContext context, WorkerRepo workersDB)
         {
             var worker = await context.Request.ReadFromJsonAsync<Worker>();
+            await workersDB.UpdateWorkerInfo(worker);
 
-            try
-            {
-                await workersDB.UpdateWorkerInfo(worker);
-            }
-            catch (Exception ex)
-            {
-                await Console.Out.WriteLineAsync(ex.ToString());
-                return Results.Problem();
-            }
             return Results.Ok();
 
         }

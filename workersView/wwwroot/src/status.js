@@ -28,9 +28,6 @@ async function getStatus() {
 
         })
         if (response.ok === true) {
-            console.log("From status after resp")
-            console.log(token2)
-
 
             const listWorkers = await response.json()
             renderStatus(listWorkers)
@@ -98,7 +95,6 @@ async function renderStatus(listWorkers) {
         const prCount = document.createElement("td");
         prCount.append(customObject[key])
         trCount.append(prCount)
-
 
         workerCountTB.append(trCount)
 

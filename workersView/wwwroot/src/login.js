@@ -1,9 +1,8 @@
 ﻿var tokenKey = "accessToken";
 
-// при нажатии на кнопку отправки формы идет запрос к /login для получения токена
 document.getElementById("submitLogin").addEventListener("click", async e => {
     e.preventDefault();
-    // отправляет запрос и получаем ответ
+
     var pass = document.getElementById("password").value
     const response = await fetch("/login", {
         method: "POST",
@@ -12,9 +11,9 @@ document.getElementById("submitLogin").addEventListener("click", async e => {
 
         )
     });
-    // если запрос прошел нормально
+
     if (response.ok === true) {
-        // получаем данные
+
         const access_token = await response.json();
         sessionStorage.setItem(tokenKey, access_token);
 

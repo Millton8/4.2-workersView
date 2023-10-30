@@ -3,7 +3,6 @@
 if (salaryTable.ariaColCount === null)
     salaryTable.style.visibility = "hidden"
 
-console.log(salaryTable.ariaColCount)
 
 async function getReport() {
     const token2 = sessionStorage.getItem("accessToken")
@@ -15,8 +14,6 @@ async function getReport() {
     if (datePosle === "")
         datePosle = "01.01.2300"
     const information = document.getElementById("information")
-    console.log("Дата", dateDo, typeof dateDo)
-    console.log("Дата", datePosle, typeof datePosle)
 
     const response = await fetch(`/date/${dateDo}/${datePosle}`, {
         method: "GET",

@@ -20,13 +20,11 @@
             information.innerHTML = ""
 
 
-        console.log(report.length)
         const workersTable = document.getElementById("workersTable")
         workersTable.innerHTML = ""
         const cells = document.querySelectorAll('tr');
         cells.style = "background:rgb(251, 255, 1);font-size: large;"
         for (const i in report) {
-            console.log(report[i])
 
             const trCount = document.createElement("tr");
             trCount.setAttribute("data-rowid", 0);
@@ -46,7 +44,6 @@
             editTd.innerHTML = "✏️"
             editTd.addEventListener("click", async e => {
                 e.preventDefault();
-                console.log("ddddd", report[i].id)
                 window.location.replace(`/edit.html?${report[i].id}?${token2}`)
             }
             )

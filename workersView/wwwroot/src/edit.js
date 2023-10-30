@@ -9,11 +9,10 @@ async function OnLoad() {
         headers: { "custom-header": "application/json", "Authorization": "Bearer " + token2 }
 
     })
-    console.log("in get")
+
     if (response.ok === true) {
-        console.log("ok")
+
         const worker = await response.json()
-        console.log(worker)
         document.getElementById("id").value = worker.id
         document.getElementById("uniq").value = worker.uniq
         document.getElementById("name").value = worker.name
@@ -37,10 +36,7 @@ async function Update() {
 
     workerstatus = Boolean(workerstatus)
     const worker = { id, uniq, name, price, workerstatus }
-    console.log("=========")
-    console.log(worker)
     const z = JSON.stringify(worker)
-    console.log(z)
 
 
     const response = await fetch(`/update`, {
