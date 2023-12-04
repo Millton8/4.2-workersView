@@ -19,5 +19,7 @@ ASP.NET CORE
 
   # viewBlazor
   Выполнен на Blazor  Server
+  
   css - Bootstrap
+  
   Данные берем обращаясь к workersView
