@@ -1,0 +1,49 @@
+﻿@page "/"
+@inject CRUD crud
+@attribute [Authorize]
+
+<PageTitle>Статус</PageTitle>
+
+
+@if (workersStatus != null)
+{
+    
+    @foreach (var worker in workersStatus)
+    {
+        <div class="d-flex justify-content-center">
+        @if (worker.workerstatus == true)
+        {
+            <p class="border-bottom border-success">
+                @worker.name сейчас работает на @worker.project
+            </p>
+        }
+        else
+        {
+            <p class="border-bottom border-danger">
+                @worker.name последний раз работал на @worker.project
+            </p>
+
+        }
+     </div>
+
+    }
+
+
+}
+else
+{
+    <Loading/>
+}
+
+
+@code {
+    List<WorkerStatus>? workersStatus;
+    protected override async Task OnInitializedAsync()
+    {
+
+        workersStatus = await crud.GetWorkersStatus();
+    }
+
+
+
+}

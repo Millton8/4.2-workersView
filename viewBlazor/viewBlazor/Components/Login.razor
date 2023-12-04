@@ -1,0 +1,39 @@
+﻿@page "/login"
+@using System.Security.Claims
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager Navigation
+
+<PageTitle>Авторизация</PageTitle>
+<div class="d-flex flex-column justify-content-center align-items-center min-vh-100 mb-2">
+    Введите пароль
+    <input class="inputbox my-3" @bind="pass" />
+    <button class="btn-primary" @onclick="LoginByPassword">Ввести</button>
+
+</div>
+
+
+@code {
+
+    [CascadingParameter]
+    Task<AuthenticationState>? authenticationStateTask { get; set; }
+    string pass = string.Empty;
+
+    async Task LoginByPassword()
+    {
+        if (pass == "123")
+        {
+            var authState = await authenticationStateTask;
+
+            var identity = new ClaimsIdentity(new[]
+                    {
+                     new Claim(ClaimTypes.Name, "TestUser"),
+                     new Claim(ClaimTypes.Role, "regular"),
+     }, "Bypass");
+            var user = new ClaimsPrincipal(identity);
+            authState.User.AddIdentity(identity);
+
+            ((ServerAuthenticationStateProvider)AuthStateProvider).SetAuthenticationState(Task.FromResult(new AuthenticationState(user)));
+            Navigation.NavigateTo("/");
+        }
+}
+}

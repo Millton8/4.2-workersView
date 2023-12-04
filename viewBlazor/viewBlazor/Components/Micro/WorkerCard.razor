@@ -1,0 +1,34 @@
+﻿@using viewBlazor.Pages
+<div class="card m-2">
+    <div class="card-body text-center">
+        <p class="card-header">Номер</p>
+        <p class="card-text">@worker.uniq</p>
+
+        <p class="card-header">Имя</p>
+        <p class="card-text fw-bold">@worker.name</p>
+
+        <p class="card-header">Зарплата</p>
+        <p class="card-text fw-bold">@worker.price</p>
+
+
+
+        <button class="btn btn-primary" @onclick="@(() => 
+        Modal.Show<Edit>("Редактировать",parameters:new ModalParameters()
+        .Add(nameof(Edit.Id), worker.id)))">
+            Изменить
+        </button>
+        
+
+    </div>
+
+</div>
+
+@code {
+    [Parameter]
+    public Worker worker { get; set; }
+    [CascadingParameter] public IModalService Modal { get; set; }
+    ModalOptions options = new ModalOptions()
+        {
+            Class = "text-center"
+        };
+}

@@ -1,0 +1,43 @@
+﻿@page "/workers"
+@using System.Security.Claims;
+@using Microsoft.AspNetCore.Authentication.Cookies;
+@using Microsoft.AspNetCore.Identity
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager Navigation
+@inject CRUD crud
+@attribute [Authorize]
+<PageTitle>Список работников</PageTitle>
+
+
+@if (workers == null)
+{
+    <Loading />
+    
+}
+else
+{
+<div class="d-flex justify-content-center flex-wrap">
+    @foreach (var worker in workers)
+    {
+        <WorkerCard worker="@worker" />
+    }
+</div>
+
+}
+
+@code {
+    
+    [CascadingParameter] 
+    public IModalService Modal { get; set; }
+
+    List<Worker>? workers;
+    
+
+    protected override async Task OnInitializedAsync()
+    {
+        workers = await crud.GetWorkers();    
+
+    }
+    
+    
+}

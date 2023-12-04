@@ -1,0 +1,153 @@
+﻿@page "/generalreport"
+@inject CRUD crud
+@attribute [Authorize]
+
+<PageTitle>Отчет по всем событиям</PageTitle>
+
+
+<div class="d-flex d-flex justify-content-center my-2 flex-wrap">
+    <input class="m-1" @bind="name" @bind:after="filterName" placeholder="Фильтр по имени" /> <br />
+    <input class="m-1" @bind="project" @bind:after="filterProject" placeholder="Фильтр по объектам" /><br />
+    <input class="m-1" type="date" @bind="dateBegin" @bind:after="filterDateBegin" />
+    <input class="m-1" type="date" @bind="dateEnd" @bind:after="filterDateBeginEnd" />
+</div>
+
+
+@if (reports == null)
+{
+    <Loading />
+}
+else
+{
+    
+    <table class="table table-striped align-middle table-bordered">
+        <thead class="table-primary stickyHead">
+    <tr>
+        <th>Номер</th>
+        <th>Имя</th>
+        <th>Объект</th>
+        <th>Начал</th>
+        <th>Закончил</th>
+        <th>Отработал</th>
+        <th>Зарплата</th>
+        <th>Заработал</th></tr>
+    </thead>
+    <tbody>
+    @if (reports!=null && isFilter==false)
+    @foreach (var report in reports)
+    {
+        <tr>
+            <td>@report.uniq</td>
+            <td>@report.name</td>
+            <td>@report.project</td>
+            <td style="white-space: pre-line">
+                @report.tBegin.ToString("dd MM yyyy \n HH:mm") 
+            </td>
+            <td style="white-space: pre-line">@report.tEnd.ToString("dd MM yyyy \n HH:mm")
+            </td>
+            <td>@report.timeOfWork.ToString("0.00")</td>
+            <td>@report.price</td>
+            <td>@report.salary</td>
+        </tr>
+    }
+    @if (isFilter && reportsfilter!=null)
+    {
+        if (reportsfilter?.Count==0)
+        {
+
+         <p>Нет совпадений</p>
+
+        }
+        else
+        {
+        foreach (var report in reportsfilter)
+        {
+                <tr><td>@report.uniq</td><td>@report.name</td><td>@report.project</td><td style="white-space: pre-line">@report.tBegin.ToString("dd MM yyyy \n HH:mm") </td><td style="white-space: pre-line">@report.tEnd.ToString("dd MM yyyy \n HH:mm")</td><td>@report.timeOfWork.ToString("0.00")</td><td>@report.price</td><td>@report.salary</td></tr>
+            }
+        }
+
+    }
+    
+    </tbody>
+    </table>
+    
+}
+
+
+
+
+
+
+@code {
+    private List<WorkRezult>? reports;
+    private List<WorkRezult>? reportsfilter;
+    private string name = "";
+    private string project = "";
+    private bool isFilter = false;
+    private DateTime dateBegin=DateTime.Today;
+    private DateTime dateEnd = DateTime.Today;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        reports = await crud.GetGeneralReport();
+        reports.Sort(FilterbyNullAndDates);
+    }
+    int FilterbyNullAndDates(WorkRezult item1,WorkRezult item2)
+    {
+        if (item1.name == null)
+            item1.name = "Нет имени";
+        if (item1.project == null)
+            item1.project = "Без названия";
+
+        if (item1.tBegin > item2.tBegin)
+            return -1;
+        else if (item1.tBegin < item2.tBegin)
+            return 1;
+        else
+            return 0;
+
+    }
+    void filterDateBeginEnd()
+    {
+        isFilter = true;
+        Console.WriteLine(dateBegin+" "+ dateEnd);
+        reportsfilter = reports.Where(x => x.tBegin<dateEnd).ToList();
+        if (dateBegin!=DateTime.Today)
+            reportsfilter = reports.Where(x => x.tBegin < dateEnd && x.tBegin >= dateBegin).ToList();
+
+    }
+    void filterDateBegin()
+    {
+        isFilter = true;
+        Console.WriteLine(dateBegin + " " + dateEnd);
+        reportsfilter = reports.Where(x => x.tBegin >= dateBegin).ToList();
+        if (dateEnd != DateTime.Today)
+            reportsfilter = reports.Where(x => x.tBegin < dateEnd && x.tBegin >= dateBegin).ToList();
+        
+    }
+    void filterName()
+    {
+        isFilter = true;
+        reportsfilter = reports.Where(x => x.name.ToLower().Contains(name.ToLower())).ToList();
+
+        if (name == "")
+        {
+            isFilter = false;
+        }
+
+
+    }
+    void filterProject()
+    {
+        isFilter = true;
+        reportsfilter = reports?.Where(x => x.project.ToLower().Contains(project.ToLower())).ToList();
+        if (project == "")
+        {
+            isFilter = false;
+        }
+
+    }
+
+}
+

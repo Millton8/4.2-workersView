@@ -1,0 +1,46 @@
+﻿@page "/edit/{id:long}"
+
+@inject CRUD crud
+@inject NavigationManager Navigation
+
+<div>
+
+    <EditForm Model="@worker" OnValidSubmit="Update">
+    <p>
+        <label style="text-align:left">Номер</label><br />
+        <InputNumber @bind-Value="worker.uniq" disabled />
+
+    </p>
+    <p>
+        <label>Имя</label><br />
+        <InputText id="name" @bind-Value="worker.name" />
+    </p>
+
+    <p>
+        <label>Зарплата</label><br />
+        <InputNumber @bind-Value="worker.price" />
+    </p>
+    <input type="submit" value="Сохранить" />
+</EditForm>
+</div>
+
+@code {
+    [Parameter]
+    public long Id { get; set; }
+    private Worker worker=new();
+    protected override async Task OnInitializedAsync()
+    {
+
+        worker=await crud.GetWorker(Id);
+
+    }
+    public async Task Update()
+    {
+        var status=await crud.UpdateWorker(worker);
+        Console.WriteLine(status+" "+status.GetType());
+        if (status.ToString()=="OK")
+            Navigation.NavigateTo("/workers");
+    }
+
+
+}
