@@ -16,3 +16,8 @@ ASP.NET CORE
  :small_blue_diamond: отчет в промежутке между двумя датами<br />
  :small_blue_diamond: онлайн проверка кто работает и на каких объектах<br />
   </div>
+
+  # viewBlazor
+  Выполнен на Blazor  Server
+  css - Bootstrap
+  Данные берем обращаясь к workersView
